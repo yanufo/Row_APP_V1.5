@@ -772,21 +772,21 @@ def display_solar_table(df):
         with col1:
             select_all_report = st.button(
                 "Select All",
-                key="select_all_report",
+                key="solar_select_all_report",
                 use_container_width=True,
             )
 
         with col2:
             clear_all_report = st.button(
                 "Clear All",
-                key="clear_all_report",
+                key="solar_clear_all_report",
                 use_container_width=True,
             )
 
         with col3:
             download = st.button(
                 "Download",
-                key="download_report",
+                key="solar_download_report",
                 use_container_width=True,
                 disabled=not selected_visible_ids,
             )
@@ -794,7 +794,7 @@ def display_solar_table(df):
         with col4:
             delete_all_report = st.button(
                 "Delete",
-                key="delete_all_report",
+                key="solar_delete_all_report",
                 type="secondary",
                 use_container_width=True,
                 disabled=not selected_visible_ids,
@@ -809,7 +809,7 @@ def display_solar_table(df):
             for rid in completed_ids:
 
                 st.session_state[
-                    f"chk_{rid}"
+                    f"solar_chk_{rid}"
                 ] = True
 
             st.rerun()
@@ -823,7 +823,7 @@ def display_solar_table(df):
             for rid in visible_ids:
 
                 st.session_state[
-                    f"chk_{rid}"
+                    f"solar_chk_{rid}"
                 ] = False
 
             st.rerun()
@@ -922,7 +922,7 @@ def display_solar_table(df):
                     # Remove selection state
                     # ----------------------------------
                     st.session_state.pop(
-                        f"chk_{report_id}",
+                        f"solar_chk_{report_id}",
                         None,
                     )
 
@@ -974,7 +974,7 @@ def display_solar_table(df):
 
             c_check.checkbox(
                 "select",
-                key=f"chk_{rid}",
+                key=f"solar_chk_{rid}",
                 label_visibility="collapsed",
             )
 
@@ -984,7 +984,7 @@ def display_solar_table(df):
 
             clicked = c_name.button(
                 report["filename"],
-                key=f"btn_{rid}",
+                key=f"solar_btn_{rid}",
                 use_container_width=True,
             )
 
@@ -1038,7 +1038,8 @@ def display_solar_table(df):
             # Status
             # ----------------------------------
 
-            c_status.markdown(str(report["status"]))
+            with c_status:
+                status_placeholders[rid] = st.empty()
 
         # ==================================================
         # REFRESH STATUSES
