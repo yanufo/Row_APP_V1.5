@@ -129,10 +129,10 @@ camera.position.set(7, 4.5, 7);
 // Renderer
 // ============================================================
 
-const renderer = new THREE.WebGLRenderer({
+const renderer = new THREE.WebGLRenderer({{
     antialias: true,
     alpha: true
-});
+}});
 
 renderer.setPixelRatio(window.devicePixelRatio);
 
