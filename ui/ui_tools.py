@@ -16,6 +16,7 @@ COL_WEIGHTS = [1,6,2,3,3,1]
 COL_WEIGHTS_2 = [1,6,2,3,1]
 STATUS_OPTIONS = ['Queued','Processing','Failed','Completed']
 SORT_OPTIONS = ["Newest First","Filename","UAV ID","Inspection Date Time","Safe Clearance Distance (m)","Status",]
+SORT_OPTIONS_SOLAR = ["Newest First","Filename","UAV ID","Inspection Date Time","Safe Clearance Distance (m)","Status",]
 def stop_airflow_run(dag_id, dag_run_id):
 
     url = (
@@ -888,7 +889,7 @@ def render_solar_filter(uav_ids):
         # -----------------------------------------
         sorting_criteria = f4.selectbox(
             "Sort by",
-            options=[""] + SORT_OPTIONS,
+            options=[""] + SORT_OPTIONS_SOLAR,
             key="sort_by",
         )
         f7, f8, f9 = st.columns(3)
