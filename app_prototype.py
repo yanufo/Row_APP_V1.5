@@ -40,7 +40,7 @@ show_new_report()
 # ============================================================
 # 3D Drone Viewer
 # ============================================================
-GLB_PATH = "/app/models/drone_costum.glb"
+GLB_PATH = "/models/drone_costum.glb"
 
 with open(GLB_PATH, "rb") as f:
     glb_base64 = base64.b64encode(f.read()).decode("utf-8")
