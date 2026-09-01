@@ -232,17 +232,12 @@ function base64ToArrayBuffer(base64) {{
 
 try {{
 
-    const glbData =
-        base64ToArrayBuffer(glbBase64);
+    const glbData =base64ToArrayBuffer(glbBase64);
 
-    const loader =
-        new THREE.GLTFLoader();
+    const loader =new THREE.GLTFLoader();
 
 
-    loader.parse(
-    glbData,
-    "",
-    function(gltf) {
+    loader.parse(glbData,"",function(gltf) {{
 
         const drone = gltf.scene;
 
@@ -297,16 +292,18 @@ try {{
 
         controls.update();
 
-    },
-    function(error) {
-        console.error(error);
+        }},
+        function(error) {{
+            console.error(error);
 
-        document.getElementById("error").innerText =
-            "Error loading GLB: " + error.message;
-    }
-);
+            document.getElementById("error").innerText =
+                "Error loading GLB: " + error.message;
+        }}
+    );
+    
+}} 
 
-}} catch (error) {{
+catch (error) {{
 
     console.error(error);
 
