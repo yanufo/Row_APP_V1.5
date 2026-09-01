@@ -42,7 +42,6 @@ CREATE TABLE IF NOT EXISTS solar_report_files (
     report_id INT NOT NULL,
     report_path VARCHAR(500) NOT NULL,
     video_path VARCHAR(250) NOT NULL,
-    debug_path VARCHAR(250),
     FOREIGN KEY (report_id) REFERENCES solar_reports(id)
 );
 
