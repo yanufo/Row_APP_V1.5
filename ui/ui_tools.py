@@ -749,6 +749,9 @@ def reset_solar_filters():
     st.session_state["uav_filter"] = []
     st.session_state["status_filter"] = []
     st.session_state["date_range"] = ()
+    st.session_state["sort_by"] = ""
+    st.session_state["sort_order"] = ""
+    
 
 
 def display_solar_table(df):
@@ -1051,9 +1054,7 @@ def display_solar_table(df):
         )
     else:
         st.write("")
-    st.session_state["sort_by"] = ""
-    st.session_state["sort_order"] = ""
-
+ 
 def render_filter(uav_ids):
 
     with st.expander(
