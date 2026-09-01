@@ -248,8 +248,6 @@ try {{
 
 
 
-
-
             scene.add(drone);
 
 
