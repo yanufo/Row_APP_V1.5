@@ -734,6 +734,8 @@ def display_solar_table(df):
         )
     else:
         st.write("")
+
+
 def reset_filters():
     st.session_state["uav_filter"] = []
     st.session_state["status_filter"] = []
@@ -741,6 +743,15 @@ def reset_filters():
     st.session_state["safe_range"] = (0, 200)
     st.session_state["sort_by"] = ""
     st.session_state["sort_order"] = ""
+
+
+def reset_solar_filters():
+    st.session_state["uav_filter"] = []
+    st.session_state["status_filter"] = []
+    st.session_state["date_range"] = ()
+    st.session_state["sort_by"] = ""
+    st.session_state["sort_order"] = ""
+
 def render_filter(uav_ids):
 
     with st.expander(
@@ -899,7 +910,7 @@ def render_solar_filter(uav_ids):
             key="report_reset_button",
             type="secondary",
             use_container_width=True,
-            on_click=reset_filters,
+            on_click=reset_solar_filters,
         )
 
     return (
