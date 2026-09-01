@@ -1,3 +1,4 @@
+from asyncio import sleep
 import os
 import uuid
 from datetime import timezone
@@ -538,6 +539,8 @@ def solar_inspection_page():
         # --------------------------------------------------
         # Create Dropbox trigger
         # --------------------------------------------------
+
+        sleep(2)
 
         dropbox_path = os.path.join(
             DEST_DIR,
