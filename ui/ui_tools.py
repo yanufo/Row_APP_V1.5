@@ -13,6 +13,7 @@ STATUS_COLORS = {
     "Failed": "#E53935",
 }
 COL_WEIGHTS = [1,6,2,3,3,1]
+COL_WEIGHTS_2 = [1,6,2,3,1]
 STATUS_OPTIONS = ['Queued','Processing','Failed','Completed']
 SORT_OPTIONS = ["Newest First","Filename","UAV ID","Inspection Date Time","Safe Clearance Distance (m)","Status",]
 def stop_airflow_run(dag_id, dag_run_id):
@@ -617,7 +618,7 @@ def display_solar_table(df):
             h_uav,
             h_time,
             h_status,
-        ) = st.columns(COL_WEIGHTS)
+        ) = st.columns(COL_WEIGHTS_2)
 
         h_check.markdown("**Select**")
         h_name.markdown("**Filename**")
@@ -645,7 +646,7 @@ def display_solar_table(df):
                 c_uav,
                 c_time,
                 c_status,
-            ) = st.columns(COL_WEIGHTS)
+            ) = st.columns(COL_WEIGHTS_2)
 
             # ----------------------------------
             # Checkbox
