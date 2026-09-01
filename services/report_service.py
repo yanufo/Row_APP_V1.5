@@ -36,7 +36,7 @@ def make_solar_filename(
     return (
         f"{uav_id}_"
         f"{date_str}_"
-        f"{time_str}_"
+        f"{time_str}"
     #     f"{clearance_height}m_"
     #     f"{sensitivity}"
     )
