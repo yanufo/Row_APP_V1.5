@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-from sql_tool.queries import get_all_reports
+from sql_tool.queries import get_all_reports,get_all_solar_reports
 from ui.ui_tools import (
     display_table,
     render_filter,
@@ -25,7 +25,7 @@ st.title("📋 Solar Reports")
 # Read data from database
 # --------------------------------------------------
 
-db_report = get_all_reports()
+db_report = get_all_solar_reports()
 df = pd.DataFrame(db_report)
 
 

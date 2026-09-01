@@ -23,6 +23,27 @@ def get_all_reports():
 
     return reports
 
+def get_all_solar_reports():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT
+            id,
+            filename,
+            uav_id,
+            inspection_datetime,
+            status
+        FROM row_database.solar_reports
+    """)
+
+    reports = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return reports
+
 def get_reports_status_by_ids(report_ids):
 
     if not report_ids:
