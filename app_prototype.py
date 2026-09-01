@@ -245,28 +245,6 @@ try {{
         function(gltf) {{
 
             const drone = gltf.scene;
-            
-            // ====================================================
-            // Material
-            // ====================================================
-
-            drone.traverse(function(child) {{
-
-                if (child.isMesh) {{
-
-                    child.material =
-                        new THREE.MeshStandardMaterial({{
-                            color: 0xfff1cc,
-                            roughness: 0.45,
-                            metalness: 0.15
-                        }});
-
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-
-                }}
-
-            }});
 
 
             scene.add(drone);
