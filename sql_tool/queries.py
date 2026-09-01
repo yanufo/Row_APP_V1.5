@@ -353,7 +353,7 @@ def create_solar_report(
             inspection_datetime,
             status
         )
-        VALUES (%s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s)
     """, (
         filename,
         uav_id,
