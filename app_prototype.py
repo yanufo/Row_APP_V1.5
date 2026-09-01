@@ -143,6 +143,24 @@ renderer.setSize(
 
 renderer.setClearColor(0x000000, 0);
 
+
+// ============================================================
+// IMPORTANT:
+// Three.js r128 uses outputEncoding for color management.
+// This preserves the correct GLB texture/material colors.
+// ============================================================
+
+renderer.outputEncoding = THREE.sRGBEncoding;
+
+
+// Optional: physically correct lighting
+renderer.physicallyCorrectLights = false;
+
+
+// ============================================================
+// Add renderer
+// ============================================================
+
 container.appendChild(renderer.domElement);
 
 
@@ -246,6 +264,54 @@ try {{
 
             const drone = gltf.scene;
 
+
+            // ====================================================
+            // PRESERVE ORIGINAL GLB COLORS
+            // ====================================================
+
+            drone.traverse(function(child) {{
+
+                if (child.isMesh) {{
+
+                    // Keep the original GLB material
+                    if (child.material) {{
+
+                        child.material.needsUpdate = true;
+
+                    }}
+
+
+                    // Support vertex colors if present
+                    if (
+                        child.geometry &&
+                        child.geometry.attributes &&
+                        child.geometry.attributes.color
+                    ) {{
+
+                        if (Array.isArray(child.material)) {{
+
+                            child.material.forEach(function(material) {{
+                                material.vertexColors = true;
+                                material.needsUpdate = true;
+                            }});
+
+                        }} else if (child.material) {{
+
+                            child.material.vertexColors = true;
+                            child.material.needsUpdate = true;
+
+                        }}
+
+                    }}
+
+                }}
+
+            }});
+
+
+            // ====================================================
+            // Add model
+            // ====================================================
 
             scene.add(drone);
 
