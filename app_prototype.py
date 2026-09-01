@@ -247,23 +247,7 @@ try {{
             const drone = gltf.scene;
 
 
-            // ====================================================
-            // Material
-            // ====================================================
 
-            drone.traverse(function(child) {{
-
-                if (child.isMesh) {{
-
-                    // If you want to preserve the GLB materials,
-                    // REMOVE this material assignment.
-
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-
-                }}
-
-            }});
 
 
             scene.add(drone);
