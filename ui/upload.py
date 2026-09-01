@@ -6,13 +6,17 @@ import streamlit as st
 import yaml
 
 from sql_tool.queries import (
+    create_solar_report,
+    has_duplicate_solar_report,
     has_processing_report,
     create_report,
-    has_duplicate_report
+    has_duplicate_report,
+    has_processing_solar_report
 )
 from services.report_service import (
     add_files_to_input,
     make_filename,
+    make_solar_filename,
 )
 
 
@@ -406,8 +410,6 @@ def solar_inspection_page():
             type="primary",
         )
 
-    st.write("Solar inspection feature goes here.")
-
     # --------------------------------------------------
     # Cancel
     # --------------------------------------------------
@@ -416,6 +418,145 @@ def solar_inspection_page():
 
         st.session_state.form_key += 1
         st.session_state.inspection_type = None
+
+        st.rerun()
+
+    
+
+
+    # --------------------------------------------------
+    # Start Processing
+    # --------------------------------------------------
+
+    if start:
+
+        # Validation
+
+        if uploaded_video is None:
+            st.error("Please upload an MP4 file.")
+            return
+
+        if uploaded_srt is None:
+            st.error("Please upload an SRT file.")
+            return
+
+        if not selected_id.strip():
+            st.error("Please enter a UAV ID.")
+            return
+
+        if inspection_dt is None:
+            st.error(
+                "Please select an inspection date/time."
+            )
+            return
+
+        # --------------------------------------------------
+        # Determine status
+        # --------------------------------------------------
+
+        processing_exist = has_processing_solar_report()
+
+        if processing_exist:
+            status = "Queued"
+        else:
+            status = "Processing"
+
+        # --------------------------------------------------
+        # Generate filename
+        # --------------------------------------------------
+
+        inspection_dt_utc = inspection_dt.replace(
+            tzinfo=timezone.utc
+        )
+
+        filename = make_solar_filename(
+            selected_id,
+            inspection_dt_utc,
+        )
+
+        # --------------------------------------------------
+        # Duplicate check
+        # --------------------------------------------------
+
+        duplicate_status = has_duplicate_solar_report(filename)
+
+        if duplicate_status:
+            st.error("Report already exists.")
+            return
+
+        # --------------------------------------------------
+        # Add files to input
+        # --------------------------------------------------
+
+        add_files_to_input(
+            config["directories"]["input"],
+            [
+                uploaded_video,
+                uploaded_srt,
+            ],
+            filename,
+        )
+
+        # --------------------------------------------------
+        # Create database record
+        # --------------------------------------------------
+
+        report_db_id = create_solar_report(
+            filename=filename,
+            uav_id=selected_id,
+            inspection_datetime=inspection_dt,
+            status=status,
+        )
+
+        # --------------------------------------------------
+        # Save files
+        # --------------------------------------------------
+
+        DEST_DIR = "/data/EGAT/inspections/solar"
+
+        os.makedirs(
+            DEST_DIR,
+            exist_ok=True,
+        )
+
+        video_path = os.path.join(
+            DEST_DIR,
+            f"{filename}.mp4",
+        )
+
+        srt_path = os.path.join(
+            DEST_DIR,
+            f"{filename}.srt",
+        )
+
+        with open(video_path, "wb") as f:
+            f.write(uploaded_video.getvalue())
+
+        with open(srt_path, "wb") as f:
+            f.write(uploaded_srt.getvalue())
+
+        # --------------------------------------------------
+        # Create Dropbox trigger
+        # --------------------------------------------------
+
+        dropbox_path = os.path.join(
+            DEST_DIR,
+            f"{filename}.dropbox",
+        )
+
+        with open(dropbox_path, "w"):
+            pass
+
+        # --------------------------------------------------
+        # Reset form
+        # --------------------------------------------------
+
+        st.session_state.form_key += 1
+        st.session_state.inspection_type = None
+
+        st.success(
+            f"Report '{filename}' created."
+        )
 
         st.rerun()
 

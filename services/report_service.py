@@ -23,6 +23,24 @@ def make_filename(
     #     f"{sensitivity}"
     )
 
+def make_solar_filename(
+    uav_id: str,
+    inspection_dt: datetime,
+    # clearance_height,
+    # sensitivity,
+) -> str:
+
+    date_str = inspection_dt.strftime("%Y-%m-%d")
+    time_str = inspection_dt.strftime("%H%M%S")
+
+    return (
+        f"{uav_id}_"
+        f"{date_str}_"
+        f"{time_str}_"
+    #     f"{clearance_height}m_"
+    #     f"{sensitivity}"
+    )
+
 def add_files_to_input(input_dir, files, filename):
     """
     Add files to the input directory.
