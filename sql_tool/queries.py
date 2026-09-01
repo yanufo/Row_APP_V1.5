@@ -196,6 +196,30 @@ def get_all_dag_run_id(report_id):
 
     return None
 
+def get_all_solar_dag_run_id(report_id):
+
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute(
+        """
+        SELECT dag_run_id
+        FROM row_database.solar_reports
+        WHERE id = %s
+        """,
+        (report_id,),
+    )
+
+    result = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if result:
+        return result["dag_run_id"]
+
+    return None
+
 def get_all_filename(report_id):
 
     conn = get_connection()

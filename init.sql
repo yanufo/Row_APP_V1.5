@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS reports (
     uav_id INT NOT NULL,
     inspection_datetime DATETIME NOT NULL,
     safe_clearance_distance INT NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'Pending'
+    status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    dag_run_id VARCHAR(250) NULL
 );
 
 
@@ -29,7 +30,8 @@ CREATE TABLE IF NOT EXISTS solar_reports (
     filename VARCHAR(250) NOT NULL,
     uav_id INT NOT NULL,
     inspection_datetime DATETIME NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'Pending'
+    status VARCHAR(50) NOT NULL DEFAULT 'Pending',
+    dag_run_id VARCHAR(250) NULL
 );
 
 
