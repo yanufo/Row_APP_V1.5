@@ -129,10 +129,10 @@ camera.position.set(7, 4.5, 7);
 // Renderer
 // ============================================================
 
-const renderer = new THREE.WebGLRenderer({{
+const renderer = new THREE.WebGLRenderer({
     antialias: true,
     alpha: true
-}});
+});
 
 renderer.setPixelRatio(window.devicePixelRatio);
 
@@ -143,23 +143,8 @@ renderer.setSize(
 
 renderer.setClearColor(0x000000, 0);
 
-
-// ============================================================
-// IMPORTANT:
-// Three.js r128 uses outputEncoding for color management.
-// This preserves the correct GLB texture/material colors.
-// ============================================================
-
+// Three.js r128
 renderer.outputEncoding = THREE.sRGBEncoding;
-
-
-// Optional: physically correct lighting
-renderer.physicallyCorrectLights = false;
-
-
-// ============================================================
-// Add renderer
-// ============================================================
 
 container.appendChild(renderer.domElement);
 
@@ -167,33 +152,32 @@ container.appendChild(renderer.domElement);
 // ============================================================
 // Lighting
 // ============================================================
-
 const ambient = new THREE.AmbientLight(
     0xffffff,
-    2.5
+    0.8
 );
 
 scene.add(ambient);
 
-
 const light1 = new THREE.DirectionalLight(
     0xffffff,
-    4
+    1.5
 );
 
 light1.position.set(10, 20, 10);
 
 scene.add(light1);
 
-
 const light2 = new THREE.DirectionalLight(
     0xffffff,
-    2
+    0.8
 );
 
 light2.position.set(-10, 10, -10);
 
 scene.add(light2);
+
+
 
 
 // ============================================================
@@ -256,150 +240,71 @@ try {{
 
 
     loader.parse(
-        glbData,
+    glbData,
+    "",
+    function(gltf) {
 
-        "",
+        const drone = gltf.scene;
 
-        function(gltf) {{
+        scene.add(drone);
 
-            const drone = gltf.scene;
+        // Get dimensions
+        const box =
+            new THREE.Box3().setFromObject(drone);
 
+        const center =
+            box.getCenter(new THREE.Vector3());
 
-            // ====================================================
-            // PRESERVE ORIGINAL GLB COLORS
-            // ====================================================
+        const size =
+            box.getSize(new THREE.Vector3());
 
-            drone.traverse(function(child) {{
+        // Center model
+        drone.position.sub(center);
 
-                if (child.isMesh) {{
-
-                    // Keep the original GLB material
-                    if (child.material) {{
-
-                        child.material.needsUpdate = true;
-
-                    }}
-
-
-                    // Support vertex colors if present
-                    if (
-                        child.geometry &&
-                        child.geometry.attributes &&
-                        child.geometry.attributes.color
-                    ) {{
-
-                        if (Array.isArray(child.material)) {{
-
-                            child.material.forEach(function(material) {{
-                                material.vertexColors = true;
-                                material.needsUpdate = true;
-                            }});
-
-                        }} else if (child.material) {{
-
-                            child.material.vertexColors = true;
-                            child.material.needsUpdate = true;
-
-                        }}
-
-                    }}
-
-                }}
-
-            }});
-
-
-            // ====================================================
-            // Add model
-            // ====================================================
-
-            scene.add(drone);
-
-
-            // ====================================================
-            // Get dimensions
-            // ====================================================
-
-            const box =
-                new THREE.Box3().setFromObject(drone);
-
-            const center =
-                box.getCenter(
-                    new THREE.Vector3()
-                );
-
-            const size =
-                box.getSize(
-                    new THREE.Vector3()
-                );
-
-
-            // ====================================================
-            // Center model
-            // ====================================================
-
-            drone.position.sub(center);
-
-
-            // ====================================================
-            // Scale model
-            // ====================================================
-
-            const maxSize =
-                Math.max(
-                    size.x,
-                    size.y,
-                    size.z
-                );
-
-            const targetSize = 9;
-
-            const scale =
-                targetSize / maxSize;
-
-            drone.scale.setScalar(scale);
-
-
-            // ====================================================
-            // Camera
-            // ====================================================
-
-            camera.position.set(
-                7,
-                4.5,
-                7
+        // Scale model
+        const maxSize =
+            Math.max(
+                size.x,
+                size.y,
+                size.z
             );
 
-            camera.lookAt(
-                0,
-                0,
-                0
-            );
+        const targetSize = 9;
 
+        const scale =
+            targetSize / maxSize;
 
-            controls.target.set(
-                0,
-                0,
-                0
-            );
+        drone.scale.setScalar(scale);
 
-            controls.update();
+        // Camera
+        camera.position.set(
+            7,
+            4.5,
+            7
+        );
 
-        }},
+        camera.lookAt(
+            0,
+            0,
+            0
+        );
 
-        function(error) {{
+        controls.target.set(
+            0,
+            0,
+            0
+        );
 
-            console.error(error);
+        controls.update();
 
-            document.getElementById(
-                "error"
-            ).innerText =
-                "Error loading GLB: " +
-                error.message;
+    },
+    function(error) {
+        console.error(error);
 
-        }}
-
-    );
+        document.getElementById("error").innerText =
+            "Error loading GLB: " + error.message;
+    }
+);
 
 }} catch (error) {{
 
