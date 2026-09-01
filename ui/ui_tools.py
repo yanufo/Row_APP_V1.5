@@ -1038,10 +1038,7 @@ def display_solar_table(df):
             # Status
             # ----------------------------------
 
-            with c_status:
-                status_placeholders[rid] = (
-                    st.empty()
-                )
+            c_status.markdown(str(report["status"]))
 
         # ==================================================
         # REFRESH STATUSES
