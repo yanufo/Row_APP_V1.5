@@ -155,8 +155,7 @@ def get_solar_report_by_id(report_id):
             r.inspection_datetime,
             r.status,
             rf.report_path,
-            rf.video_path,
-            rf.debug_path
+            rf.video_path
         FROM row_database.solar_reports AS r
         LEFT JOIN row_database.solar_report_files AS rf
             ON r.id = rf.report_id
