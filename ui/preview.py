@@ -3,7 +3,7 @@ import os
 
 import streamlit as st
 import streamlit.components.v1 as components
-from sql_tool.queries import get_report_by_id
+from sql_tool.queries import get_report_by_id, get_solar_report_by_id
 
 
 def format_mmss(seconds: int) -> str:
@@ -103,6 +103,101 @@ def preview_dialog(report_id):
     inject_preview_drawer_css()
 
     report = get_report_by_id(report_id)
+
+    if report is None:
+        st.error("Report not found.")
+        return
+
+    st.caption(report["filename"])
+
+    tab_report, tab_video, tab_video_debug = st.tabs(
+        ["📄 Report", "🎬 Processed Video", "🎬 Debug Video"]
+    )
+
+    with tab_report:
+
+        html_path = report["report_path"]
+
+        if os.path.exists(html_path):
+
+            with open(html_path, "rb") as f:
+                html_bytes = f.read()
+
+            components.html(
+                html_bytes.decode(
+                    "utf-8",
+                    errors="replace",
+                ),
+                height=550,
+                scrolling=True,
+            )
+
+            st.download_button(
+                "⬇ Download report",
+                data=html_bytes,
+                file_name=report["filename"] + ".html",
+                mime="text/html",
+                key=f"dl_report_{report_id}",
+            )
+
+        else:
+
+            st.warning(
+                "Report HTML file not found."
+            )
+
+    with tab_video:
+
+        video_path = report["video_path"]
+
+        if os.path.exists(video_path):
+
+            with open(video_path, "rb") as f:
+                video_bytes = f.read()
+
+            video_player(video_bytes)
+
+            st.download_button(
+                "⬇ Download video",
+                data=video_bytes,
+                file_name=report["filename"] + ".mp4",
+                mime="video/mp4",
+                key=f"dl_video_{report_id}",
+            )
+
+        else:
+            st.warning("Processed video file not found.")
+
+
+    with tab_video_debug:
+    
+            video_path = report["debug_path"]
+    
+            if os.path.exists(video_path):
+    
+                with open(video_path, "rb") as f:
+                    video_bytes = f.read()
+    
+                video_player(video_bytes)
+    
+                st.download_button(
+                    "⬇ Download video",
+                    data=video_bytes,
+                    file_name=report["filename"] + ".mp4",
+                    mime="video/mp4",
+                    key=f"dl__bug_video_{report_id}",
+                )
+    
+            else:
+                st.warning("Processed video file not found.")
+
+
+@st.dialog("Preview", width="large")
+def preview_dialog_solar(report_id):
+
+    inject_preview_drawer_css()
+
+    report = get_solar_report_by_id(report_id)
 
     if report is None:
         st.error("Report not found.")

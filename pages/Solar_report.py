@@ -28,7 +28,6 @@ st.title("📋 Solar Reports")
 db_report = get_all_solar_reports()
 df = pd.DataFrame(db_report)
 
-st.write(df)
 # --------------------------------------------------
 # Get UAV IDs
 # --------------------------------------------------

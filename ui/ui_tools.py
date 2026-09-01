@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from sql_tool.queries import get_all_reports,get_reports_status_by_ids,get_report_by_id,get_all_dag_run_id,get_all_filename,delete_from_database,get_all_solar_filename,delete_from_solar_database,get_solar_report_by_id,get_solar_reports_status_by_ids
-from ui.preview import preview_dialog
+from ui.preview import preview_dialog, preview_dialog_solar
 from pathlib import Path
 import requests
 from ui.download import download_dialog
@@ -683,7 +683,7 @@ def display_solar_table(df):
 
                 elif latest_report["status"] == "Completed":
 
-                    preview_dialog(rid)
+                    preview_dialog_solar(rid)
 
                 else:
 
