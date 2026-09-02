@@ -3,8 +3,6 @@ from pathlib import Path
 
 import streamlit.components.v1 as components
 
-GLB_PATH = "/models/usagi.glb"
-
 def display_3d_usagi(
     height: int = 520,
     target_size: float = 9,
@@ -24,7 +22,8 @@ def display_3d_usagi(
         Target size used to scale the model in the viewer.
     """
 
-    glb_path = Path(glb_path)
+    GLB_PATH = "/models/usagi.glb"
+    glb_path = Path(GLB_PATH)
 
     # ============================================================
     # Load GLB
