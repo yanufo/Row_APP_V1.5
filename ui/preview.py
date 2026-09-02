@@ -137,10 +137,10 @@ def preview_dialog(report_id):
                 errors="replace",
             )
 
-            # Force readable text in dark mode
-            html_content = html_content.replace(
-                "</head>",
-                """
+            theme = st.get_option("theme.base")
+
+            if theme == "dark":
+                preview_css = """
                 <style>
                     body {
                         color: #f1f1f1 !important;
@@ -155,8 +155,28 @@ def preview_dialog(report_id):
                         color: #ffffff !important;
                     }
                 </style>
-                </head>
-                """,
+                """
+            else:
+                preview_css = """
+                <style>
+                    body {
+                        color: #222222 !important;
+                        background-color: #ffffff !important;
+                    }
+
+                    p, div, span, td, th, li {
+                        color: #222222 !important;
+                    }
+
+                    h1, h2, h3, h4, h5, h6 {
+                        color: #222222 !important;
+                    }
+                </style>
+                """
+
+            html_content = html_content.replace(
+                "</head>",
+                preview_css + "</head>",
                 1,
             )
 
