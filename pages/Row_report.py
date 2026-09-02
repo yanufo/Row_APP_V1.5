@@ -8,6 +8,17 @@ from ui.ui_tools import (
     filter_reports,
 )
 
+# ============================================================
+# Hide Streamlit Deploy button
+# ============================================================
+
+st.markdown("""
+<style>
+[data-testid="stAppDeployButton"] {
+    display: none;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # --------------------------------------------------
 # Read data from database

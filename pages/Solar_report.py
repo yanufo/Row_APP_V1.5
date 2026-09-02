@@ -12,13 +12,17 @@ from ui.ui_tools import (
 )
 
 
-# st.set_page_config(
-#     page_title="Reports",
-#     page_icon="📋",
-#     layout="wide",
-# )
+# ============================================================
+# Hide Streamlit Deploy button
+# ============================================================
 
-# st.title("📋 Solar Reports")
+st.markdown("""
+<style>
+[data-testid="stAppDeployButton"] {
+    display: none;
+}
+</style>
+""", unsafe_allow_html=True)
 
 
 # --------------------------------------------------

@@ -123,11 +123,45 @@ def preview_dialog(report_id):
             with open(html_path, "rb") as f:
                 html_bytes = f.read()
 
+            # components.html(
+            #     html_bytes.decode(
+            #         "utf-8",
+            #         errors="replace",
+            #     ),
+            #     height=550,
+            #     scrolling=True,
+            # )
+
+            html_content = html_bytes.decode(
+                "utf-8",
+                errors="replace",
+            )
+
+            # Force readable text in dark mode
+            html_content = html_content.replace(
+                "</head>",
+                """
+                <style>
+                    body {
+                        color: #f1f1f1 !important;
+                        background-color: #1e1e1e !important;
+                    }
+
+                    p, div, span, td, th, li {
+                        color: #f1f1f1 !important;
+                    }
+
+                    h1, h2, h3, h4, h5, h6 {
+                        color: #ffffff !important;
+                    }
+                </style>
+                </head>
+                """,
+                1,
+            )
+
             components.html(
-                html_bytes.decode(
-                    "utf-8",
-                    errors="replace",
-                ),
+                html_content,
                 height=550,
                 scrolling=True,
             )
