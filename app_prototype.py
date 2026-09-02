@@ -1,7 +1,7 @@
 import streamlit as st
 
-LOGO_ICON = "images/logo_icon.png"
-LOGO_FULL = "images/logo_full.png"
+LOGO_ICON = "images/ST_logo_icon.png"
+LOGO_FULL = "images/ST_logo_full.png"
 
 st.logo(LOGO_FULL, icon_image=LOGO_ICON)
 
