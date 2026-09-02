@@ -111,6 +111,24 @@ def get_selected_visible_ids(df):
 
     return selected_ids
 
+def get_selected_solar_visible_ids(df):
+    """
+    Return IDs of reports that are currently visible
+    and whose checkbox is selected.
+    """
+
+    selected_ids = []
+
+    for rid in df["id"].tolist():
+
+        if st.session_state.get(
+            f"solar_chk_{rid}",
+            False,
+        ):
+            selected_ids.append(rid)
+
+    return selected_ids
+
 
 def display_table(df):
 
@@ -769,7 +787,7 @@ def display_solar_table(df):
         # ACTION BAR
         # ==================================================
 
-        selected_visible_ids = get_selected_visible_ids(df)
+        selected_visible_ids = get_selected_solar_visible_ids(df)
 
         col1, col2, col3, col4 = st.columns(4)
 
@@ -838,7 +856,7 @@ def display_solar_table(df):
 
         if download:
 
-            selected_visible_ids = get_selected_visible_ids(df)
+            selected_visible_ids = get_selected_solar_visible_ids(df)
 
             if selected_visible_ids:
 
@@ -861,7 +879,7 @@ def display_solar_table(df):
 
         if delete_all_report:
 
-            ids_to_delete = get_selected_visible_ids(df)
+            ids_to_delete = get_selected_solar_visible_ids(df)
 
             if not ids_to_delete:
 
