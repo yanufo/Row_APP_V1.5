@@ -1,16 +1,9 @@
 import streamlit as st
 
-HORIZONTAL_RED = "images/horizontal_red.png"
-ICON_RED = "images/icon_red.png"
-HORIZONTAL_BLUE = "images/horizontal_blue.png"
-ICON_BLUE = "images/icon_blue.png"
+LOGO_ICON = "images/logo_icon.png"
+LOGO_FULL = "images/logo_full.png"
 
-options = [HORIZONTAL_RED, ICON_RED, HORIZONTAL_BLUE, ICON_BLUE]
-sidebar_logo = st.selectbox("Sidebar logo", options, 0)
-main_body_logo = st.selectbox("Main body logo", options, 1)
-
-st.logo(sidebar_logo, icon_image=main_body_logo)
-st.sidebar.markdown("Hi!")
+st.logo(LOGO_FULL, icon_image=LOGO_ICON)
 
 st.set_page_config(
     page_title="App Prototype",
