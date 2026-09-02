@@ -17,6 +17,7 @@ COL_WEIGHTS_2 = [1,6,2,3,1]
 STATUS_OPTIONS = ['Queued','Processing','Failed','Completed']
 SORT_OPTIONS = ["Newest First","Filename","UAV ID","Inspection Date Time","Safe Clearance Distance (m)","Status",]
 SORT_OPTIONS_SOLAR = ["Newest First","Filename","UAV ID","Inspection Date Time","Safe Clearance Distance (m)","Status",]
+
 def stop_airflow_run(dag_id, dag_run_id):
 
     url = (

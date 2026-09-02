@@ -12,13 +12,13 @@ from ui.ui_tools import (
 )
 
 
-st.set_page_config(
-    page_title="Reports",
-    page_icon="📋",
-    layout="wide",
-)
+# st.set_page_config(
+#     page_title="Reports",
+#     page_icon="📋",
+#     layout="wide",
+# )
 
-st.title("📋 Solar Reports")
+# st.title("📋 Solar Reports")
 
 
 # --------------------------------------------------

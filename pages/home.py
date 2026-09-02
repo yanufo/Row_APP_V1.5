@@ -6,10 +6,10 @@ from sql_tool.queries import get_all_reports
 from ui.upload import show_new_report
 import base64
 
-st.set_page_config(
-    page_title="RoW Inspection Report",
-    layout="wide",
-)
+# st.set_page_config(
+#     page_title="RoW Inspection Report",
+#     layout="wide",
+# )
 
 
 # ============================================================
