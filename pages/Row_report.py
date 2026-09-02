@@ -9,15 +9,6 @@ from ui.ui_tools import (
 )
 
 
-# st.set_page_config(
-#     page_title="Reports",
-#     page_icon="📋",
-#     layout="wide",
-# )
-
-# st.title("📋 Inspection Reports")
-
-
 # --------------------------------------------------
 # Read data from database
 # --------------------------------------------------
