@@ -272,11 +272,56 @@ def preview_dialog_solar(report_id):
             with open(html_path, "rb") as f:
                 html_bytes = f.read()
 
+            html_content = html_bytes.decode(
+                "utf-8",
+                errors="replace",
+            )
+
+            theme = st.get_option("theme.base")
+
+            if theme == "dark":
+                preview_css = """
+                <style>
+                    body {
+                        color: #f1f1f1 !important;
+                        background-color: #1e1e1e !important;
+                    }
+
+                    p, div, span, td, th, li {
+                        color: #f1f1f1 !important;
+                    }
+
+                    h1, h2, h3, h4, h5, h6 {
+                        color: #ffffff !important;
+                    }
+                </style>
+                """
+            else:
+                preview_css = """
+                <style>
+                    body {
+                        color: #222222 !important;
+                        background-color: #ffffff !important;
+                    }
+
+                    p, div, span, td, th, li {
+                        color: #222222 !important;
+                    }
+
+                    h1, h2, h3, h4, h5, h6 {
+                        color: #222222 !important;
+                    }
+                </style>
+                """
+
+            html_content = html_content.replace(
+                "</head>",
+                preview_css + "</head>",
+                1,
+            )
+
             components.html(
-                html_bytes.decode(
-                    "utf-8",
-                    errors="replace",
-                ),
+                html_content,
                 height=550,
                 scrolling=True,
             )
