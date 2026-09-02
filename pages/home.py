@@ -4,13 +4,8 @@ import streamlit.components.v1 as components
 
 from sql_tool.queries import get_all_reports
 from ui.upload import show_new_report
+from ui.usagi_model import display_3d_usagi
 import base64
-
-# st.set_page_config(
-#     page_title="RoW Inspection Report",
-#     layout="wide",
-# )
-
 
 # ============================================================
 # Hide Streamlit Deploy button
@@ -28,350 +23,352 @@ st.markdown("""
 # ============================================================
 # New Report
 # ============================================================
-st.title("Row Inspection Report")
+st.title("Inspection Report Generation")
 
 show_new_report()
 
 # ============================================================
-# 3D Drone Viewer
+# 3D King Usagi Viewer
 # ============================================================
 
+display_3d_usagi()
 
-# ============================================================
-# 3D Drone Viewer
-# ============================================================
-GLB_PATH = "/models/usagi.glb"
+# GLB_PATH = "/models/usagi.glb"
 
-with open(GLB_PATH, "rb") as f:
-    glb_base64 = base64.b64encode(f.read()).decode("utf-8")
+# with open(GLB_PATH, "rb") as f:
+#     glb_base64 = base64.b64encode(f.read()).decode("utf-8")
 
 
-html = f"""
-<!DOCTYPE html>
-<html>
+# html = f"""
+# <!DOCTYPE html>
+# <html>
 
-<head>
+# <head>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+# <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+# <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+# <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
-<style>
+# <style>
 
-html, body {{
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: transparent;
-}}
+# html, body {{
+#     margin: 0;
+#     padding: 0;
+#     width: 100%;
+#     height: 100%;
+#     overflow: hidden;
+#     background: transparent;
+# }}
 
-#viewer {{
-    width: 100%;
-    height: 500px;
-    background: transparent;
-}}
+# #viewer {{
+#     width: 100%;
+#     height: 500px;
+#     background: transparent;
+# }}
 
-canvas {{
-    display: block;
-}}
+# canvas {{
+#     display: block;
+# }}
 
-#error {{
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    color: red;
-    font-family: Arial;
-    font-size: 16px;
-}}
+# #error {{
+#     position: absolute;
+#     top: 20px;
+#     left: 20px;
+#     color: red;
+#     font-family: Arial;
+#     font-size: 16px;
+# }}
 
-</style>
+# </style>
 
-</head>
+# </head>
 
-<body>
+# <body>
 
-<div id="viewer"></div>
-<div id="error"></div>
+# <div id="viewer"></div>
+# <div id="error"></div>
 
-<script>
+# <script>
 
-const container = document.getElementById("viewer");
+# const container = document.getElementById("viewer");
 
 
-// ============================================================
-// Scene
-// ============================================================
+# // ============================================================
+# // Scene
+# // ============================================================
 
-const scene = new THREE.Scene();
+# const scene = new THREE.Scene();
 
-scene.background = null;
+# scene.background = null;
 
 
-// ============================================================
-// Camera
-// ============================================================
+# // ============================================================
+# // Camera
+# // ============================================================
 
-const camera = new THREE.PerspectiveCamera(
-    45,
-    container.clientWidth / container.clientHeight,
-    0.01,
-    100000
-);
+# const camera = new THREE.PerspectiveCamera(
+#     45,
+#     container.clientWidth / container.clientHeight,
+#     0.01,
+#     100000
+# );
 
-camera.position.set(7, 4.5, 7);
+# camera.position.set(7, 4.5, 7);
 
 
-// ============================================================
-// Renderer
-// ============================================================
+# // ============================================================
+# // Renderer
+# // ============================================================
 
-const renderer = new THREE.WebGLRenderer({{
-    antialias: true,
-    alpha: true
-}});
+# const renderer = new THREE.WebGLRenderer({{
+#     antialias: true,
+#     alpha: true
+# }});
 
-renderer.setPixelRatio(window.devicePixelRatio);
+# renderer.setPixelRatio(window.devicePixelRatio);
 
-renderer.setSize(
-    container.clientWidth,
-    container.clientHeight
-);
+# renderer.setSize(
+#     container.clientWidth,
+#     container.clientHeight
+# );
 
-renderer.setClearColor(0x000000, 0);
+# renderer.setClearColor(0x000000, 0);
 
-// Three.js r128
-renderer.outputEncoding = THREE.sRGBEncoding;
+# // Three.js r128
+# renderer.outputEncoding = THREE.sRGBEncoding;
 
-container.appendChild(renderer.domElement);
+# container.appendChild(renderer.domElement);
 
 
-// ============================================================
-// Lighting
-// ============================================================
-const ambient = new THREE.AmbientLight(
-    0xffffff,
-    0.8
-);
+# // ============================================================
+# // Lighting
+# // ============================================================
+# const ambient = new THREE.AmbientLight(
+#     0xffffff,
+#     0.8
+# );
 
-scene.add(ambient);
+# scene.add(ambient);
 
-const light1 = new THREE.DirectionalLight(
-    0xffffff,
-    1.5
-);
+# const light1 = new THREE.DirectionalLight(
+#     0xffffff,
+#     1.5
+# );
 
-light1.position.set(10, 20, 10);
+# light1.position.set(10, 20, 10);
 
-scene.add(light1);
+# scene.add(light1);
 
-const light2 = new THREE.DirectionalLight(
-    0xffffff,
-    0.8
-);
+# const light2 = new THREE.DirectionalLight(
+#     0xffffff,
+#     0.8
+# );
 
-light2.position.set(-10, 10, -10);
+# light2.position.set(-10, 10, -10);
 
-scene.add(light2);
+# scene.add(light2);
 
 
 
 
-// ============================================================
-// Controls
-// ============================================================
+# // ============================================================
+# // Controls
+# // ============================================================
 
-const controls = new THREE.OrbitControls(
-    camera,
-    renderer.domElement
-);
+# const controls = new THREE.OrbitControls(
+#     camera,
+#     renderer.domElement
+# );
 
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
+# controls.enableDamping = true;
+# controls.dampingFactor = 0.05;
 
-controls.enablePan = true;
-controls.enableZoom = true;
+# controls.enablePan = true;
+# controls.enableZoom = true;
 
-controls.minDistance = 1;
-controls.maxDistance = 100;
+# controls.minDistance = 1;
+# controls.maxDistance = 100;
 
 
-// ============================================================
-// GLB
-// ============================================================
+# // ============================================================
+# // GLB
+# // ============================================================
 
-const glbBase64 = "{glb_base64}";
+# const glbBase64 = "{glb_base64}";
 
 
-// ============================================================
-// Base64 → ArrayBuffer
-// ============================================================
+# // ============================================================
+# // Base64 → ArrayBuffer
+# // ============================================================
 
-function base64ToArrayBuffer(base64) {{
+# function base64ToArrayBuffer(base64) {{
 
-    const binaryString = atob(base64);
+#     const binaryString = atob(base64);
 
-    const len = binaryString.length;
+#     const len = binaryString.length;
 
-    const bytes = new Uint8Array(len);
+#     const bytes = new Uint8Array(len);
 
-    for (let i = 0; i < len; i++) {{
-        bytes[i] = binaryString.charCodeAt(i);
-    }}
+#     for (let i = 0; i < len; i++) {{
+#         bytes[i] = binaryString.charCodeAt(i);
+#     }}
 
-    return bytes.buffer;
-}}
+#     return bytes.buffer;
+# }}
 
 
-// ============================================================
-// Load GLB
-// ============================================================
+# // ============================================================
+# // Load GLB
+# // ============================================================
 
-try {{
+# try {{
 
-    const glbData =base64ToArrayBuffer(glbBase64);
+#     const glbData =base64ToArrayBuffer(glbBase64);
 
-    const loader =new THREE.GLTFLoader();
+#     const loader =new THREE.GLTFLoader();
 
 
-    loader.parse(glbData,"",function(gltf) {{
+#     loader.parse(glbData,"",function(gltf) {{
 
-        const drone = gltf.scene;
+#         const drone = gltf.scene;
 
-        scene.add(drone);
+#         scene.add(drone);
 
-        // Get dimensions
-        const box =
-            new THREE.Box3().setFromObject(drone);
+#         // Get dimensions
+#         const box =
+#             new THREE.Box3().setFromObject(drone);
 
-        const center =
-            box.getCenter(new THREE.Vector3());
+#         const center =
+#             box.getCenter(new THREE.Vector3());
 
-        const size =
-            box.getSize(new THREE.Vector3());
+#         const size =
+#             box.getSize(new THREE.Vector3());
 
-        // Center model
-        drone.position.sub(center);
+#         // Center model
+#         drone.position.sub(center);
 
-        // Scale model
-        const maxSize =
-            Math.max(
-                size.x,
-                size.y,
-                size.z
-            );
+#         // Scale model
+#         const maxSize =
+#             Math.max(
+#                 size.x,
+#                 size.y,
+#                 size.z
+#             );
 
-        const targetSize = 9;
+#         const targetSize = 9;
 
-        const scale =
-            targetSize / maxSize;
+#         const scale =
+#             targetSize / maxSize;
 
-        drone.scale.setScalar(scale);
+#         drone.scale.setScalar(scale);
 
-        // Camera
-        camera.position.set(
-            7,
-            4.5,
-            7
-        );
+#         // Camera
+#         camera.position.set(
+#             7,
+#             4.5,
+#             7
+#         );
 
-        camera.lookAt(
-            0,
-            0,
-            0
-        );
+#         camera.lookAt(
+#             0,
+#             0,
+#             0
+#         );
 
-        controls.target.set(
-            0,
-            0,
-            0
-        );
+#         controls.target.set(
+#             0,
+#             0,
+#             0
+#         );
 
-        controls.update();
+#         controls.update();
 
-        }},
-        function(error) {{
-            console.error(error);
+#         }},
+#         function(error) {{
+#             console.error(error);
 
-            document.getElementById("error").innerText =
-                "Error loading GLB: " + error.message;
-        }}
-    );
+#             document.getElementById("error").innerText =
+#                 "Error loading GLB: " + error.message;
+#         }}
+#     );
     
-}} 
+# }} 
 
-catch (error) {{
+# catch (error) {{
 
-    console.error(error);
+#     console.error(error);
 
-    document.getElementById(
-        "error"
-    ).innerText =
-        "Error loading drone: " +
-        error.message;
+#     document.getElementById(
+#         "error"
+#     ).innerText =
+#         "Error loading drone: " +
+#         error.message;
 
-}}
-
-
-// ============================================================
-// Resize
-// ============================================================
-
-window.addEventListener(
-    "resize",
-    function() {{
-
-        camera.aspect =
-            container.clientWidth /
-            container.clientHeight;
-
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(
-            container.clientWidth,
-            container.clientHeight
-        );
-
-    }}
-);
+# }}
 
 
-// ============================================================
-// Animation
-// ============================================================
+# // ============================================================
+# // Resize
+# // ============================================================
 
-function animate() {{
+# window.addEventListener(
+#     "resize",
+#     function() {{
 
-    requestAnimationFrame(animate);
+#         camera.aspect =
+#             container.clientWidth /
+#             container.clientHeight;
 
-    controls.update();
+#         camera.updateProjectionMatrix();
 
-    renderer.render(
-        scene,
-        camera
-    );
+#         renderer.setSize(
+#             container.clientWidth,
+#             container.clientHeight
+#         );
 
-}}
-
-animate();
-
-</script>
-
-</body>
-
-</html>
-"""
+#     }}
+# );
 
 
-components.html(
-    html,
-    height=520
-)
+# // ============================================================
+# // Animation
+# // ============================================================
+
+# function animate() {{
+
+#     requestAnimationFrame(animate);
+
+#     controls.update();
+
+#     renderer.render(
+#         scene,
+#         camera
+#     );
+
+# }}
+
+# animate();
+
+# </script>
+
+# </body>
+
+# </html>
+# """
 
 
+# components.html(
+#     html,
+#     height=520
+# )
+
+
+
+# ============================================================
+# 3D Drone Viewer
+# ============================================================
 
 # OBJ_PATH = "/app/models/drone_costum.obj"
 
