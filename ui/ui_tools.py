@@ -4,7 +4,7 @@ from sql_tool.queries import get_all_reports, get_all_solar_dag_run_id,get_repor
 from ui.preview import preview_dialog, preview_dialog_solar
 from pathlib import Path
 import requests
-from ui.download import download_dialog
+from ui.download import download_dialog, download_dialog_solar
 
 STATUS_COLORS = {
     "Queued": "#1E88E5",
@@ -534,7 +534,7 @@ def display_solar_table(df):
 
         if download:
 
-            selected_visible_ids = get_selected_visible_ids(df)
+            selected_visible_ids = get_selected_solar_visible_ids(df)
 
             if selected_visible_ids:
 
@@ -542,7 +542,7 @@ def display_solar_table(df):
                     df["id"].isin(selected_visible_ids)
                 ].to_dict("records")
 
-                download_dialog(
+                download_dialog_solar(
                     selected_reports
                 )
 
