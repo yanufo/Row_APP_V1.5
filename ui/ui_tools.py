@@ -557,7 +557,7 @@ def display_solar_table(df):
 
         if delete_all_report:
 
-            ids_to_delete = get_selected_visible_ids(df)
+            ids_to_delete = get_selected_solar_visible_ids(df)
 
             if not ids_to_delete:
 

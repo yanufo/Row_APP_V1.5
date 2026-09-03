@@ -15,13 +15,13 @@ from sql_tool.queries import (
     has_processing_solar_report
 )
 from services.report_service import (
-    add_files_to_input,
+    # add_files_to_input,
     make_filename,
     make_solar_filename,
 )
 
 
-with open("config.yml", "r") as f:
+with open("/inspection/config.yml", "r") as f:
     config = yaml.safe_load(f)
 
 
@@ -251,14 +251,14 @@ def new_report_dialog():
             # Add files to input
             # --------------------------------------------------
 
-            add_files_to_input(
-                config["directories"]["input"],
-                [
-                    uploaded_video,
-                    uploaded_srt,
-                ],
-                filename,
-            )
+            # add_files_to_input(
+            #     config["directories"]["input"],
+            #     [
+            #         uploaded_video,
+            #         uploaded_srt,
+            #     ],
+            #     filename,
+            # )
 
             # --------------------------------------------------
             # Create database record
@@ -482,14 +482,14 @@ def solar_inspection_page():
         # Add files to input
         # --------------------------------------------------
 
-        add_files_to_input(
-            config["directories"]["input"],
-            [
-                uploaded_video,
-                uploaded_srt,
-            ],
-            filename,
-        )
+        # add_files_to_input(
+        #     config["directories"]["input"],
+        #     [
+        #         uploaded_video,
+        #         uploaded_srt,
+        #     ],
+        #     filename,
+        # )
 
         # --------------------------------------------------
         # Create database record
