@@ -5,7 +5,7 @@ import yaml
 import zipfile
 
 
-with open("config.yml", "r") as f:
+with open("inspection/config.yml", "r") as f:
     config = yaml.safe_load(f)
 
 OUTPUT_DIR = config["directories"]["output"]
