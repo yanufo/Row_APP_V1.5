@@ -129,6 +129,9 @@ COPY --from=builder /build/pages /app/pages
 
 COPY --from=builder /build/images /app/images
 
+RUN mkdir -p /app/inspection
+
+COPY --from=builder /build/inspection/config.yml /app/inspection/config.yml
 
 # =========================
 # Compiled UI modules
@@ -179,10 +182,4 @@ HEALTHCHECK \
     --retries=3 \
     CMD curl --fail http://localhost:8501/_stcore/health || exit 1
 
-ENTRYPOINT [
-    "streamlit",
-    "run",
-    "/app/app_prototype.py",
-    "--server.port=8501",
-    "--server.address=0.0.0.0"
-]
+ENTRYPOINT ["streamlit", "run", "/app/app_prototype.py", "--server.port=8501", "--server.address=0.0.0.0"]

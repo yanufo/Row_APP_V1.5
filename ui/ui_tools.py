@@ -601,7 +601,7 @@ def display_solar_table(df):
                     )
 
                     # ----------------------------------
-                    # Delete input file
+                    # Delete input file (by right airflow would clean up)
                     # ----------------------------------
 
                     INPUT_DIR = Path(
@@ -611,6 +611,24 @@ def display_solar_table(df):
                     if INPUT_DIR.exists() and filename:
 
                         for file_path in INPUT_DIR.iterdir():
+
+                            if (
+                                file_path.is_file()
+                                and file_path.stem == filename
+                            ):
+                                file_path.unlink()
+
+                    # ----------------------------------
+                    # Delete output file
+                    # ----------------------------------
+
+                    OUTPUT_DIR = Path(
+                        "/data/EGAT/inspections/Output/Solar"
+                    )
+
+                    if OUTPUT_DIR.exists() and filename:
+
+                        for file_path in OUTPUT_DIR.iterdir():
 
                             if (
                                 file_path.is_file()
