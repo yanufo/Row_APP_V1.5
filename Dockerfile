@@ -9,24 +9,88 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     git \
+    patchelf \
     && rm -rf /var/lib/apt/lists/*
 
-# Get your source code
+# Clone application
 RUN git clone https://github.com/yanufo/Row_APP_V1.5.git .
 
-# Install Python dependencies
 COPY requirements.txt .
+
+# Install all application dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install Nuitka
 RUN pip install --no-cache-dir nuitka
 
-# Compile the Streamlit application
+
+# =========================
+# Compile application modules
+# =========================
+
+RUN mkdir -p /build/compiled/ui
+RUN mkdir -p /build/compiled/sql_tool
+RUN mkdir -p /build/compiled/services
+
+
+# -------------------------
+# UI
+# -------------------------
+
 RUN python -m nuitka \
-    --standalone \
-    --follow-imports \
-    --output-dir=/build/dist \
-    app_prototype.py
+    --module \
+    --output-dir=/build/compiled/ui \
+    ui/upload.py
+
+RUN python -m nuitka \
+    --module \
+    --output-dir=/build/compiled/ui \
+    ui/download.py
+
+RUN python -m nuitka \
+    --module \
+    --output-dir=/build/compiled/ui \
+    ui/ui_tools.py
+
+RUN python -m nuitka \
+    --module \
+    --output-dir=/build/compiled/ui \
+    ui/preview.py
+
+RUN python -m nuitka \
+    --module \
+    --output-dir=/build/compiled/ui \
+    ui/usagi_model.py
+
+RUN python -m nuitka \
+    --module \
+    --output-dir=/build/compiled/ui \
+    ui/drone_model.py
+
+
+# -------------------------
+# SQL
+# -------------------------
+
+RUN python -m nuitka \
+    --module \
+    --output-dir=/build/compiled/sql_tool \
+    sql_tool/connection.py
+
+RUN python -m nuitka \
+    --module \
+    --output-dir=/build/compiled/sql_tool \
+    sql_tool/queries.py
+
+
+# -------------------------
+# Services
+# -------------------------
+
+RUN python -m nuitka \
+    --module \
+    --output-dir=/build/compiled/services \
+    services/report_service.py
 
 
 # =========================
@@ -40,8 +104,71 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy only the compiled application
-COPY --from=builder /build/dist/app_prototype.dist /app/app_prototype.dist
+
+# =========================
+# Python dependencies
+# =========================
+
+COPY --from=builder /build/requirements.txt /tmp/requirements.txt
+
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
+
+# =========================
+# Streamlit entrypoint
+# =========================
+
+COPY --from=builder /build/app_prototype.py /app/app_prototype.py
+
+COPY --from=builder /build/pages /app/pages
+
+
+# =========================
+# Application assets
+# =========================
+
+COPY --from=builder /build/images /app/images
+
+
+# =========================
+# Compiled UI modules
+# =========================
+
+RUN mkdir -p /app/ui
+
+COPY --from=builder /build/compiled/ui/ /app/ui/
+
+
+# =========================
+# Compiled SQL modules
+# =========================
+
+RUN mkdir -p /app/sql_tool
+
+COPY --from=builder /build/compiled/sql_tool/ /app/sql_tool/
+
+
+# =========================
+# Compiled services
+# =========================
+
+RUN mkdir -p /app/services
+
+COPY --from=builder /build/compiled/services/ /app/services/
+
+
+# =========================
+# Package markers
+# =========================
+
+RUN touch /app/ui/__init__.py
+RUN touch /app/sql_tool/__init__.py
+RUN touch /app/services/__init__.py
+
+
+# =========================
+# Streamlit
+# =========================
 
 EXPOSE 8501
 
@@ -53,7 +180,9 @@ HEALTHCHECK \
     CMD curl --fail http://localhost:8501/_stcore/health || exit 1
 
 ENTRYPOINT [
-    "/app/app_prototype.dist/app_prototype",
+    "streamlit",
+    "run",
+    "/app/app_prototype.py",
     "--server.port=8501",
     "--server.address=0.0.0.0"
 ]
