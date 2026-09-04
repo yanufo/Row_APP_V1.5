@@ -451,326 +451,326 @@ def display_table(df):
         st.write("")
 
 
-def display_solar_table(df):
+# def display_solar_table(df):
 
-    # ==================================================
-    # VISIBLE REPORT IDS
-    # ==================================================
-    if not df.empty:
-        visible_ids = df["id"].tolist()
+#     # ==================================================
+#     # VISIBLE REPORT IDS
+#     # ==================================================
+#     if not df.empty:
+#         visible_ids = df["id"].tolist()
 
-        completed_ids = df.loc[df["status"] == "Completed","id",].tolist()
+#         completed_ids = df.loc[df["status"] == "Completed","id",].tolist()
 
-        # ==================================================
-        # ACTION BAR
-        # ==================================================
+#         # ==================================================
+#         # ACTION BAR
+#         # ==================================================
 
-        selected_visible_ids = get_selected_visible_ids(df)
+#         selected_visible_ids = get_selected_visible_ids(df)
 
-        col1, col2, col3, col4 = st.columns(4)
+#         col1, col2, col3, col4 = st.columns(4)
 
-        with col1:
-            select_all_report = st.button(
-                "Select All",
-                key="select_all_report",
-                use_container_width=True,
-            )
+#         with col1:
+#             select_all_report = st.button(
+#                 "Select All",
+#                 key="select_all_report",
+#                 use_container_width=True,
+#             )
 
-        with col2:
-            clear_all_report = st.button(
-                "Clear All",
-                key="clear_all_report",
-                use_container_width=True,
-            )
+#         with col2:
+#             clear_all_report = st.button(
+#                 "Clear All",
+#                 key="clear_all_report",
+#                 use_container_width=True,
+#             )
 
-        with col3:
-            download = st.button(
-                "Download",
-                key="download_report",
-                use_container_width=True,
-                disabled=not selected_visible_ids,
-            )
+#         with col3:
+#             download = st.button(
+#                 "Download",
+#                 key="download_report",
+#                 use_container_width=True,
+#                 disabled=not selected_visible_ids,
+#             )
 
-        with col4:
-            delete_all_report = st.button(
-                "Delete",
-                key="delete_all_report",
-                type="secondary",
-                use_container_width=True,
-                disabled=not selected_visible_ids,
-            )
+#         with col4:
+#             delete_all_report = st.button(
+#                 "Delete",
+#                 key="delete_all_report",
+#                 type="secondary",
+#                 use_container_width=True,
+#                 disabled=not selected_visible_ids,
+#             )
 
-        # ==================================================
-        # SELECT ALL
-        # ==================================================
+#         # ==================================================
+#         # SELECT ALL
+#         # ==================================================
 
-        if select_all_report:
+#         if select_all_report:
 
-            for rid in completed_ids:
+#             for rid in completed_ids:
 
-                st.session_state[
-                    f"chk_{rid}"
-                ] = True
+#                 st.session_state[
+#                     f"chk_{rid}"
+#                 ] = True
 
-            st.rerun()
+#             st.rerun()
 
-        # ==================================================
-        # CLEAR ALL
-        # ==================================================
+#         # ==================================================
+#         # CLEAR ALL
+#         # ==================================================
 
-        if clear_all_report:
+#         if clear_all_report:
 
-            for rid in visible_ids:
+#             for rid in visible_ids:
 
-                st.session_state[
-                    f"chk_{rid}"
-                ] = False
+#                 st.session_state[
+#                     f"chk_{rid}"
+#                 ] = False
 
-            st.rerun()
+#             st.rerun()
 
-        # ==================================================
-        # DOWNLOAD
-        # ==================================================
+#         # ==================================================
+#         # DOWNLOAD
+#         # ==================================================
 
-        if download:
+#         if download:
 
-            selected_visible_ids = get_selected_solar_visible_ids(df)
+#             selected_visible_ids = get_selected_solar_visible_ids(df)
 
-            if selected_visible_ids:
+#             if selected_visible_ids:
 
-                selected_reports = df[
-                    df["id"].isin(selected_visible_ids)
-                ].to_dict("records")
+#                 selected_reports = df[
+#                     df["id"].isin(selected_visible_ids)
+#                 ].to_dict("records")
 
-                download_dialog_solar(
-                    selected_reports
-                )
+#                 download_dialog_solar(
+#                     selected_reports
+#                 )
 
-            else:
+#             else:
 
-                st.warning(
-                    "Please select at least one report."
-                )
-        # ==================================================
-        # DELETE
-        # ==================================================
+#                 st.warning(
+#                     "Please select at least one report."
+#                 )
+#         # ==================================================
+#         # DELETE
+#         # ==================================================
 
-        if delete_all_report:
+#         if delete_all_report:
 
-            ids_to_delete = get_selected_solar_visible_ids(df)
+#             ids_to_delete = get_selected_solar_visible_ids(df)
 
-            if not ids_to_delete:
+#             if not ids_to_delete:
 
-                st.warning(
-                    "No reports are selected."
-                )
+#                 st.warning(
+#                     "No reports are selected."
+#                 )
 
-            else:
+#             else:
 
-                for report_id in ids_to_delete:
+#                 for report_id in ids_to_delete:
 
-                    # ----------------------------------
-                    # Database information
-                    # ----------------------------------
+#                     # ----------------------------------
+#                     # Database information
+#                     # ----------------------------------
 
-                    dag_run_id = get_all_solar_dag_run_id(
-                        report_id
-                    )
+#                     dag_run_id = get_all_solar_dag_run_id(
+#                         report_id
+#                     )
 
-                    filename = get_all_solar_filename(
-                        report_id
-                    )
+#                     filename = get_all_solar_filename(
+#                         report_id
+#                     )
 
-                    # ----------------------------------
-                    # Stop Airflow
-                    # ----------------------------------
+#                     # ----------------------------------
+#                     # Stop Airflow
+#                     # ----------------------------------
 
-                    if dag_run_id:
+#                     if dag_run_id:
 
-                        stop_airflow_run(
-                            dag_id="EGATWorkflowPipeline",
-                            dag_run_id=dag_run_id,
-                        )
+#                         stop_airflow_run(
+#                             dag_id="EGATWorkflowPipeline",
+#                             dag_run_id=dag_run_id,
+#                         )
 
-                    # ----------------------------------
-                    # Delete database record
-                    # ----------------------------------
+#                     # ----------------------------------
+#                     # Delete database record
+#                     # ----------------------------------
 
-                    delete_from_solar_database(
-                        report_id
-                    )
+#                     delete_from_solar_database(
+#                         report_id
+#                     )
 
-                    # ----------------------------------
-                    # Delete input file (by right airflow would clean up)
-                    # ----------------------------------
+#                     # ----------------------------------
+#                     # Delete input file (by right airflow would clean up)
+#                     # ----------------------------------
 
-                    INPUT_DIR = Path(
-                        "/data/EGAT/inspections/Solar"
-                    )
+#                     INPUT_DIR = Path(
+#                         "/data/EGAT/inspections/Solar"
+#                     )
 
-                    if INPUT_DIR.exists() and filename:
+#                     if INPUT_DIR.exists() and filename:
 
-                        for file_path in INPUT_DIR.iterdir():
+#                         for file_path in INPUT_DIR.iterdir():
 
-                            if (
-                                file_path.is_file()
-                                and file_path.stem == filename
-                            ):
-                                file_path.unlink()
+#                             if (
+#                                 file_path.is_file()
+#                                 and file_path.stem == filename
+#                             ):
+#                                 file_path.unlink()
 
-                    # ----------------------------------
-                    # Delete output file
-                    # ----------------------------------
+#                     # ----------------------------------
+#                     # Delete output file
+#                     # ----------------------------------
 
-                    OUTPUT_DIR = Path(
-                        "/data/EGAT/inspections/Output/Solar"
-                    )
+#                     OUTPUT_DIR = Path(
+#                         "/data/EGAT/inspections/Output/Solar"
+#                     )
 
-                    if OUTPUT_DIR.exists() and filename:
+#                     if OUTPUT_DIR.exists() and filename:
 
-                        for file_path in OUTPUT_DIR.iterdir():
+#                         for file_path in OUTPUT_DIR.iterdir():
 
-                            if (
-                                file_path.is_file()
-                                and file_path.stem == filename
-                            ):
-                                file_path.unlink()
+#                             if (
+#                                 file_path.is_file()
+#                                 and file_path.stem == filename
+#                             ):
+#                                 file_path.unlink()
 
-                    # ----------------------------------
-                    # Remove selection state
-                    # ----------------------------------
-                    st.session_state.pop(
-                        f"chk_{report_id}",
-                        None,
-                    )
+#                     # ----------------------------------
+#                     # Remove selection state
+#                     # ----------------------------------
+#                     st.session_state.pop(
+#                         f"chk_{report_id}",
+#                         None,
+#                     )
 
-                st.rerun()
+#                 st.rerun()
 
-        # ==================================================
-        # TABLE HEADER
-        # ==================================================
+#         # ==================================================
+#         # TABLE HEADER
+#         # ==================================================
 
-        (
-            h_check,
-            h_name,
-            h_uav,
-            h_time,
-            h_status,
-        ) = st.columns(COL_WEIGHTS_2)
+#         (
+#             h_check,
+#             h_name,
+#             h_uav,
+#             h_time,
+#             h_status,
+#         ) = st.columns(COL_WEIGHTS_2)
 
-        h_check.markdown("**Select**")
-        h_name.markdown("**Filename**")
-        h_uav.markdown("**UAV ID**")
-        h_time.markdown("**Inspection Date Time**")
-        h_status.markdown("**Status**")
+#         h_check.markdown("**Select**")
+#         h_name.markdown("**Filename**")
+#         h_uav.markdown("**UAV ID**")
+#         h_time.markdown("**Inspection Date Time**")
+#         h_status.markdown("**Status**")
 
-        # ==================================================
-        # STATUS PLACEHOLDERS
-        # ==================================================
+#         # ==================================================
+#         # STATUS PLACEHOLDERS
+#         # ==================================================
 
-        status_placeholders = {}
+#         status_placeholders = {}
 
-        # ==================================================
-        # TABLE ROWS
-        # ==================================================
+#         # ==================================================
+#         # TABLE ROWS
+#         # ==================================================
 
-        for _, report in df.iterrows():
+#         for _, report in df.iterrows():
 
-            rid = report["id"]
+#             rid = report["id"]
 
-            (
-                c_check,
-                c_name,
-                c_uav,
-                c_time,
-                c_status,
-            ) = st.columns(COL_WEIGHTS_2)
+#             (
+#                 c_check,
+#                 c_name,
+#                 c_uav,
+#                 c_time,
+#                 c_status,
+#             ) = st.columns(COL_WEIGHTS_2)
 
-            # ----------------------------------
-            # Checkbox
-            # ----------------------------------
+#             # ----------------------------------
+#             # Checkbox
+#             # ----------------------------------
 
-            c_check.checkbox(
-                "select",
-                key=f"chk_{rid}",
-                label_visibility="collapsed",
-            )
+#             c_check.checkbox(
+#                 "select",
+#                 key=f"chk_{rid}",
+#                 label_visibility="collapsed",
+#             )
 
-            # ----------------------------------
-            # Filename / Preview
-            # ----------------------------------
+#             # ----------------------------------
+#             # Filename / Preview
+#             # ----------------------------------
 
-            clicked = c_name.button(
-                report["filename"],
-                key=f"btn_{rid}",
-                use_container_width=True,
-            )
+#             clicked = c_name.button(
+#                 report["filename"],
+#                 key=f"btn_{rid}",
+#                 use_container_width=True,
+#             )
 
-            if clicked:
+#             if clicked:
 
-                latest_report = get_solar_report_by_id(
-                    rid
-                )
+#                 latest_report = get_solar_report_by_id(
+#                     rid
+#                 )
 
-                if latest_report is None:
+#                 if latest_report is None:
 
-                    st.error(
-                        "Report not found."
-                    )
+#                     st.error(
+#                         "Report not found."
+#                     )
 
-                elif latest_report["status"] == "Completed":
+#                 elif latest_report["status"] == "Completed":
 
-                    preview_dialog_solar(rid)
+#                     preview_dialog_solar(rid)
 
-                else:
+#                 else:
 
-                    st.warning(
-                        f"Report is currently "
-                        f"{latest_report['status']}."
-                    )
+#                     st.warning(
+#                         f"Report is currently "
+#                         f"{latest_report['status']}."
+#                     )
 
-            # ----------------------------------
-            # UAV
-            # ----------------------------------
+#             # ----------------------------------
+#             # UAV
+#             # ----------------------------------
 
-            c_uav.markdown(
-                str(report["uav_id"])
-            )
+#             c_uav.markdown(
+#                 str(report["uav_id"])
+#             )
 
-            # ----------------------------------
-            # Date
-            # ----------------------------------
+#             # ----------------------------------
+#             # Date
+#             # ----------------------------------
 
-            inspection_time = pd.to_datetime(
-                report["inspection_datetime"]
-            )
+#             inspection_time = pd.to_datetime(
+#                 report["inspection_datetime"]
+#             )
 
-            c_time.markdown(
-                inspection_time.strftime(
-                    "%Y-%m-%d %H:%M:%S"
-                )
-            )
+#             c_time.markdown(
+#                 inspection_time.strftime(
+#                     "%Y-%m-%d %H:%M:%S"
+#                 )
+#             )
 
 
-            # ----------------------------------
-            # Status
-            # ----------------------------------
+#             # ----------------------------------
+#             # Status
+#             # ----------------------------------
 
-            with c_status:
-                status_placeholders[rid] = (
-                    st.empty()
-                )
+#             with c_status:
+#                 status_placeholders[rid] = (
+#                     st.empty()
+#                 )
 
-        # ==================================================
-        # REFRESH STATUSES
-        # ==================================================
+#         # ==================================================
+#         # REFRESH STATUSES
+#         # ==================================================
 
-        refresh_statuses(
-            visible_ids,
-            status_placeholders,
-        )
-    else:
-        st.write("")
+#         refresh_statuses(
+#             visible_ids,
+#             status_placeholders,
+#         )
+#     else:
+#         st.write("")
 
 
 def reset_filters():
@@ -941,16 +941,34 @@ def display_solar_table(df):
                     )
 
                     # ----------------------------------
-                    # Delete input file
+                    # Delete input file (by right airflow would clean up)
                     # ----------------------------------
 
                     INPUT_DIR = Path(
-                        "/data/EGAT/inspections/Solar"
+                        "/data/EGAT/inspections/solar"
                     )
 
                     if INPUT_DIR.exists() and filename:
 
                         for file_path in INPUT_DIR.iterdir():
+
+                            if (
+                                file_path.is_file()
+                                and file_path.stem == filename
+                            ):
+                                file_path.unlink()
+
+                    # ----------------------------------
+                    # Delete output file
+                    # ----------------------------------
+
+                    OUTPUT_DIR = Path(
+                        "/data/EGAT/inspections/output/solar"
+                    )
+
+                    if OUTPUT_DIR.exists() and filename:
+
+                        for file_path in OUTPUT_DIR.iterdir():
 
                             if (
                                 file_path.is_file()
