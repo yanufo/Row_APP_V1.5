@@ -882,7 +882,7 @@ def display_solar_table(df):
                     df["id"].isin(selected_visible_ids)
                 ].to_dict("records")
 
-                download_dialog(
+                download_dialog_solar(
                     selected_reports
                 )
 
