@@ -139,7 +139,7 @@ def new_report_dialog():
                 st.write('''
                     Safe clearance distance is the mandatory minimum distance from electrical line and people, buildings, trees, or equipment to stop electric shocks and arcing
                 ''')
-                st.image("/images/safe_clear_distance_info.png")
+                st.image("images/safe_clear_distance_info.png")
 
         with col2:
 
