@@ -24,33 +24,8 @@ from services.report_service import (
 with open("/inspection/config.yml", "r") as f:
     config = yaml.safe_load(f)
 
-
-# ==================================================
-# CONFIRM CANCEL DIALOG
-# ==================================================
-
-@st.dialog("Cancel Upload?")
-def confirm_cancel():
-    st.write("Are you sure you want to cancel?")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        if st.button(
-            "No",
-            use_container_width=True,
-        ):
-            st.rerun()
-
-    with col2:
-        if st.button(
-            "Yes, cancel",
-            type="primary",
-            use_container_width=True,
-        ):
-            st.session_state.form_key += 1
-            st.session_state.inspection_type = None
-            st.rerun()
+if "confirm_cancel" not in st.session_state:
+    st.session_state.confirm_cancel = False
 
 # ==================================================
 # UPLOAD DIALOG
@@ -210,7 +185,26 @@ def new_report_dialog():
 
             # st.rerun()
 
-            confirm_cancel() 
+            st.session_state.confirm_cancel = True
+            st.rerun()
+
+        if st.session_state.get("confirm_cancel", False):
+
+            st.warning("Are you sure you want to cancel?")
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                if st.button("No", key=f"cancel_no_{fk}"):
+                    st.session_state.confirm_cancel = False
+                    st.rerun()
+
+            with col2:
+                if st.button("Yes, cancel", key=f"cancel_yes_{fk}", type="primary"):
+                    st.session_state.form_key += 1
+                    st.session_state.inspection_type = None
+                    st.session_state.confirm_cancel = False
+                    st.rerun()
 
 
         # --------------------------------------------------
@@ -443,11 +437,10 @@ def solar_inspection_page():
 
     if cancel:
 
-        # st.session_state.form_key += 1
-        # st.session_state.inspection_type = None
+        st.session_state.form_key += 1
+        st.session_state.inspection_type = None
 
-        # st.rerun()
-        confirm_cancel()
+        st.rerun()
 
     
     # --------------------------------------------------
