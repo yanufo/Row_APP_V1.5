@@ -954,7 +954,7 @@ def display_solar_table(df):
 
                             if (
                                 file_path.is_file()
-                                and file_path.stem == filename
+                                and file_path.name.startswith(f"{filename}.")
                             ):
                                 file_path.unlink()
 
@@ -972,7 +972,7 @@ def display_solar_table(df):
 
                             if (
                                 file_path.is_file()
-                                and file_path.stem == filename
+                                and file_path.name.startswith(f"{filename}.")
                             ):
                                 file_path.unlink()
 
