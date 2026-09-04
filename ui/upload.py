@@ -24,8 +24,6 @@ from services.report_service import (
 with open("/inspection/config.yml", "r") as f:
     config = yaml.safe_load(f)
 
-if "confirm_cancel" not in st.session_state:
-    st.session_state.confirm_cancel = False
 
 # ==================================================
 # UPLOAD DIALOG
@@ -180,32 +178,10 @@ def new_report_dialog():
 
         if cancel:
 
-            # st.session_state.form_key += 1
-            # st.session_state.inspection_type = None
+            st.session_state.form_key += 1
+            st.session_state.inspection_type = None
 
-            # st.rerun()
-
-            st.session_state.confirm_cancel = True
             st.rerun()
-
-        if st.session_state.get("confirm_cancel", False):
-
-            st.warning("Are you sure you want to cancel?")
-
-            col1, col2 = st.columns(2)
-
-            with col1:
-                if st.button("No", key=f"cancel_no_{fk}"):
-                    st.session_state.confirm_cancel = False
-                    st.rerun()
-
-            with col2:
-                if st.button("Yes, cancel", key=f"cancel_yes_{fk}", type="primary"):
-                    st.session_state.form_key += 1
-                    st.session_state.inspection_type = None
-                    st.session_state.confirm_cancel = False
-                    st.rerun()
-
 
         # --------------------------------------------------
         # Start Processing
