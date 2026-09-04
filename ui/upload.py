@@ -26,6 +26,33 @@ with open("/inspection/config.yml", "r") as f:
 
 
 # ==================================================
+# CONFIRM CANCEL DIALOG
+# ==================================================
+
+@st.dialog("Cancel Upload?")
+def confirm_cancel():
+    st.write("Are you sure you want to cancel?")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button(
+            "No",
+            use_container_width=True,
+        ):
+            st.rerun()
+
+    with col2:
+        if st.button(
+            "Yes, cancel",
+            type="primary",
+            use_container_width=True,
+        ):
+            st.session_state.form_key += 1
+            st.session_state.inspection_type = None
+            st.rerun()
+
+# ==================================================
 # UPLOAD DIALOG
 # ==================================================
 
@@ -178,12 +205,12 @@ def new_report_dialog():
 
         if cancel:
 
-            st.session_state.form_key += 1
-            st.session_state.inspection_type = None
+            # st.session_state.form_key += 1
+            # st.session_state.inspection_type = None
 
-            st.rerun()
+            # st.rerun()
 
-        
+            confirm_cancel() 
 
 
         # --------------------------------------------------
@@ -416,14 +443,13 @@ def solar_inspection_page():
 
     if cancel:
 
-        st.session_state.form_key += 1
-        st.session_state.inspection_type = None
+        # st.session_state.form_key += 1
+        # st.session_state.inspection_type = None
 
-        st.rerun()
+        # st.rerun()
+        confirm_cancel()
 
     
-
-
     # --------------------------------------------------
     # Start Processing
     # --------------------------------------------------
