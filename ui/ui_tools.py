@@ -280,7 +280,7 @@ def display_table(df):
                     )
 
                     # ----------------------------------
-                    # Delete input file
+                    # Delete input file (Usually Airflow cleans up, but just in case)
                     # ----------------------------------
 
                     INPUT_DIR = Path(
@@ -294,6 +294,24 @@ def display_table(df):
                             if (
                                 file_path.is_file()
                                 and file_path.stem == filename
+                            ):
+                                file_path.unlink()
+
+                    # ----------------------------------
+                    # Delete output file
+                    # ----------------------------------
+
+                    OUTPUT_DIR = Path(
+                        "/data/EGAT/inspections/output/row"
+                    )
+
+                    if OUTPUT_DIR.exists() and filename:
+
+                        for file_path in OUTPUT_DIR.iterdir():
+
+                            if (
+                                file_path.is_file()
+                                and file_path.name.startswith(f"{filename}.")
                             ):
                                 file_path.unlink()
 
